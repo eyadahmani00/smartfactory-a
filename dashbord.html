@@ -1,1 +1,640 @@
 
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SmartFactory AI | Industrial Intelligence</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --blue:#2563eb;
+  --cyan:#22d3ee;
+  --navy:#101d35;
+  --bg:#f3f6fc;
+  --text:#182943;
+  --muted:#8290a5;
+  --green:#13b981;
+  --orange:#f59e0b;
+  --red:#ef4444;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Inter,sans-serif;background:var(--bg);color:var(--text)}
+button{font-family:inherit;cursor:pointer}
+.app{min-height:100vh}
+
+/* SIDEBAR */
+.sidebar{
+ position:fixed;left:0;top:0;bottom:0;width:245px;
+ background:#101b30;color:white;padding:26px 17px;
+ z-index:10;display:flex;flex-direction:column;
+ border-right:1px solid #ffffff12;
+}
+.logo{display:flex;align-items:center;gap:12px;margin:0 8px 42px}
+.logo-icon{
+ width:43px;height:43px;border-radius:13px;
+ background:linear-gradient(135deg,#2563eb,#06b6d4);
+ display:grid;place-items:center;font-size:23px;
+ box-shadow:0 0 25px #2563eb55;
+}
+.logo-name{font-size:16px;font-weight:800;letter-spacing:-.5px}
+.logo-sub{font-size:9px;color:#65d9f5;letter-spacing:2px;margin-top:5px}
+.menu-title{font-size:9px;color:#65758f;letter-spacing:1.5px;margin:17px 12px 12px;font-weight:700}
+.nav a{
+ display:flex;align-items:center;gap:13px;
+ color:#9aabc3;text-decoration:none;padding:13px 12px;
+ margin:4px 0;border-radius:9px;font-size:12px;
+ transition:.25s;
+}
+.nav a:hover,.nav a.active{background:#ffffff12;color:white}
+.nav a.active{border-left:3px solid #28c5f0}
+.nav-icon{font-size:17px;width:20px;text-align:center}
+.sidebar-status{
+ margin-top:auto;padding:15px;border:1px solid #ffffff18;
+ border-radius:12px;background:#ffffff08;
+}
+.sidebar-status small{color:#8293ad;font-size:10px}
+.sidebar-status strong{display:block;font-size:11px;color:#4ade80;margin-top:9px}
+
+/* MAIN */
+.main{margin-left:245px;min-height:100vh}
+.topbar{
+ height:75px;background:white;border-bottom:1px solid #e7edf5;
+ display:flex;align-items:center;justify-content:space-between;
+ padding:0 35px;
+}
+.breadcrumb{font-size:11px;color:#8492a6}
+.breadcrumb strong{color:#243957}
+.top-right{display:flex;align-items:center;gap:17px}
+.live{font-size:10px;color:#10a66f;display:flex;align-items:center;gap:7px}
+.live-dot{width:7px;height:7px;border-radius:50%;background:#10b981;animation:blink 1.5s infinite}
+@keyframes blink{50%{opacity:.3;box-shadow:0 0 10px #10b981}}
+.profile{display:flex;align-items:center;gap:9px}
+.avatar{
+ width:34px;height:34px;border-radius:50%;
+ display:grid;place-items:center;color:white;font-weight:700;
+ background:linear-gradient(135deg,#2563eb,#22d3ee);
+}
+.profile small{display:block;color:#8794a8;font-size:9px;margin-top:3px}
+.profile strong{font-size:11px}
+
+/* HERO VIDEO */
+.hero{
+ position:relative;margin:25px 30px 24px;
+ min-height:265px;border-radius:18px;overflow:hidden;
+ background:#102746;color:white;
+ box-shadow:0 12px 35px #10274630;
+}
+.hero video{
+ position:absolute;inset:0;width:100%;height:100%;
+ object-fit:cover;opacity:.52;
+}
+.hero-overlay{
+ position:absolute;inset:0;
+ background:linear-gradient(90deg,#091a32ee 0%,#102b4bb8 55%,#0d234c55 100%);
+}
+.hero-content{position:relative;z-index:2;padding:37px 39px;max-width:670px}
+.eyebrow{
+ display:inline-flex;align-items:center;gap:8px;
+ border:1px solid #ffffff40;background:#ffffff13;
+ border-radius:30px;padding:7px 11px;font-size:9px;
+ letter-spacing:1.4px;color:#a7eaff;
+}
+.hero h1{font-size:31px;line-height:1.25;margin:19px 0 12px;letter-spacing:-1px}
+.hero h1 span{color:#53d9ff}
+.hero p{color:#c5d4e7;font-size:12px;line-height:1.8;max-width:520px}
+.hero-buttons{display:flex;gap:10px;margin-top:22px}
+.btn-primary,.btn-outline{
+ padding:11px 16px;border-radius:8px;font-size:10px;
+ font-weight:700;transition:.25s;
+}
+.btn-primary{border:0;background:#2584ef;color:white}
+.btn-primary:hover{background:#48a5ff;transform:translateY(-2px)}
+.btn-outline{background:#ffffff12;border:1px solid #ffffff50;color:white}
+.btn-outline:hover{background:#ffffff25}
+.hero-orbit{
+ position:absolute;right:11%;top:50%;transform:translateY(-50%);
+ width:175px;height:175px;border-radius:50%;
+ border:1px solid #56cfff50;
+ box-shadow:0 0 50px #22d3ee19,inset 0 0 40px #22d3ee15;
+ display:grid;place-items:center;z-index:2;
+}
+.orbit-inner{
+ width:125px;height:125px;border-radius:50%;
+ border:1px dashed #70ddff80;
+ display:grid;place-items:center;font-size:55px;
+ animation:rotate 22s linear infinite;
+}
+@keyframes rotate{to{transform:rotate(360deg)}}
+
+/* CONTENT */
+.content{padding:0 30px 30px}
+.section-head{display:flex;justify-content:space-between;align-items:center;margin:26px 0 15px}
+.section-head h2{font-size:15px;font-weight:800;color:#172b49}
+.section-head p{font-size:10px;color:#8592a5;margin-top:5px}
+.refresh{
+ border:1px solid #dce5f0;background:white;color:#52647c;
+ padding:9px 13px;border-radius:8px;font-size:10px;
+}
+.refresh:hover{color:var(--blue);border-color:var(--blue)}
+
+/* KPI */
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:15px}
+.card{
+ background:white;border:1px solid #e8edf5;
+ border-radius:13px;box-shadow:0 3px 15px #1e3a5f07;
+ transition:.3s;
+}
+.card:hover{transform:translateY(-4px);box-shadow:0 10px 25px #1e3a5f12}
+.kpi{padding:18px;position:relative;overflow:hidden}
+.kpi:after{
+ content:"";position:absolute;right:-25px;bottom:-38px;
+ width:100px;height:100px;border-radius:50%;background:#eff6ff;
+}
+.kpi-top{display:flex;justify-content:space-between;align-items:center}
+.kpi-label{font-size:10px;color:#8290a5;font-weight:600}
+.kpi-icon{
+ width:36px;height:36px;border-radius:10px;
+ display:grid;place-items:center;font-size:17px;
+}
+.blue{background:#eff6ff;color:#2563eb}
+.green{background:#ecfdf5;color:#10a66f}
+.orange{background:#fff7ed;color:#f59e0b}
+.red{background:#fef2f2;color:#ef4444}
+.kpi-value{font-size:27px;font-weight:800;margin:13px 0 7px;letter-spacing:-1px}
+.kpi-note{font-size:9px;color:#8a98aa}
+.kpi-note b{color:#10a66f}
+.progress{height:4px;background:#edf1f6;border-radius:10px;margin-top:13px;overflow:hidden}
+.progress span{display:block;height:100%;border-radius:10px;animation:grow 1.4s ease}
+@keyframes grow{from{width:0}}
+
+/* TABLE */
+.table-card{overflow:hidden}
+.table-top{padding:16px 19px;display:flex;justify-content:space-between;align-items:center}
+.table-top h3{font-size:12px}
+.table-top p{font-size:9px;color:#8996a8;margin-top:5px}
+.search{
+ border:1px solid #e3e9f1;border-radius:7px;
+ padding:9px 11px;font-size:10px;outline:none;width:190px
+}
+.search:focus{border-color:#2563eb}
+.table-scroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse;white-space:nowrap}
+th{
+ background:#f7f9fc;text-align:left;padding:13px 17px;
+ font-size:9px;color:#8794a7;letter-spacing:.5px;
+}
+td{padding:14px 17px;border-top:1px solid #f0f3f7;font-size:10px}
+tbody tr:hover{background:#f8fbff}
+.machine{display:flex;align-items:center;gap:10px}
+.machine-symbol{
+ width:32px;height:32px;border-radius:9px;background:#eff6ff;
+ display:grid;place-items:center;color:#2563eb;font-size:16px
+}
+.machine strong{font-size:10px;display:block}
+.machine small{display:block;color:#98a4b5;font-size:9px;margin-top:4px}
+.pill{padding:6px 9px;border-radius:20px;font-size:9px;font-weight:700}
+.normal{background:#eafaf2;color:#0d9c65}
+.warning{background:#fff5e8;color:#d58b1b}
+.critical{background:#fff0f0;color:#df4141}
+
+/* CHARTS */
+.charts{display:grid;grid-template-columns:1.55fr 1fr;gap:15px}
+.chart-card{padding:19px;min-height:310px}
+.chart-title{display:flex;justify-content:space-between;align-items:center}
+.chart-title h3{font-size:12px}
+.chart-title p{font-size:9px;color:#929fb0;margin-top:5px}
+.chart-area{height:225px;margin-top:20px}
+
+/* AI PANEL */
+.ai-panel{
+ background:linear-gradient(120deg,#112b50,#164c83);
+ border-radius:14px;padding:20px;color:white;
+ display:flex;align-items:center;justify-content:space-between;
+ gap:20px;overflow:hidden;position:relative;
+}
+.ai-panel:after{
+ content:"✧";position:absolute;right:27%;top:-40px;
+ font-size:180px;color:#ffffff09;
+}
+.ai-text{position:relative;z-index:1}
+.ai-label{font-size:9px;color:#8ddfff;letter-spacing:1.4px;font-weight:700}
+.ai-text h3{font-size:17px;margin:11px 0}
+.ai-text p{font-size:10px;color:#c4d7ee;line-height:1.7;max-width:570px}
+.ai-score{
+ position:relative;z-index:1;min-width:105px;text-align:center;
+ padding:14px;border:1px solid #ffffff30;border-radius:12px;background:#ffffff10;
+}
+.ai-score strong{font-size:28px;color:#65e0ff;display:block}
+.ai-score small{font-size:9px;color:#d0e3f5}
+
+/* ALERTS */
+.bottom{display:grid;grid-template-columns:1.1fr 1fr;gap:15px}
+.panel{padding:19px}
+.panel h3{font-size:12px}
+.panel-sub{font-size:9px;color:#8d9aac;margin-top:5px}
+.alert-row{display:flex;align-items:center;gap:11px;padding:13px 0;border-bottom:1px solid #f0f2f6}
+.alert-row:last-child{border:0}
+.alert-icon{
+ width:32px;height:32px;display:grid;place-items:center;
+ border-radius:9px;flex-shrink:0
+}
+.alert-info{flex:1}
+.alert-info strong{font-size:10px}
+.alert-info p{font-size:9px;color:#8794a7;margin-top:5px;line-height:1.5}
+.alert-time{font-size:9px;color:#9aa6b6}
+.recommendation{
+ background:#f6f9ff;border:1px solid #e6edfa;
+ padding:13px;border-radius:9px;margin-top:12px
+}
+.recommendation strong{font-size:10px}
+.recommendation p{font-size:9px;color:#74839a;line-height:1.7;margin-top:7px}
+.recommendation button{
+ margin-top:10px;border:0;background:#e8f0ff;
+ color:#2563eb;padding:8px 10px;border-radius:6px;font-size:9px;font-weight:700
+}
+.footer{text-align:center;color:#9aa7b7;font-size:9px;padding:28px 0}
+
+/* ANIMATION */
+.reveal{opacity:0;transform:translateY(15px);animation:reveal .65s ease forwards}
+@keyframes reveal{to{opacity:1;transform:translateY(0)}}
+
+@media(max-width:1100px){
+ .kpis{grid-template-columns:repeat(2,1fr)}
+ .charts,.bottom{grid-template-columns:1fr}
+ .hero-orbit{right:5%;width:130px;height:130px}
+ .orbit-inner{width:95px;height:95px;font-size:38px}
+}
+@media(max-width:750px){
+ .sidebar{width:65px;padding:20px 7px}
+ .logo{justify-content:center;margin:0 0 30px}
+ .logo-text,.menu-title,.nav-text,.sidebar-status{display:none}
+ .nav a{justify-content:center;padding:13px 5px}
+ .main{margin-left:65px}
+ .topbar{padding:0 14px}
+ .content{padding:0 12px 20px}
+ .hero{margin:15px 12px;min-height:290px}
+ .hero-content{padding:27px 20px}
+ .hero h1{font-size:24px}
+ .hero-orbit{opacity:.25;right:-15px;top:70%}
+ .top-right .profile{display:none}
+}
+@media(max-width:450px){
+ .kpis{grid-template-columns:1fr 1fr;gap:8px}
+ .kpi{padding:12px}
+ .kpi-value{font-size:23px}
+ .hero h1{font-size:21px}
+ .ai-panel{align-items:flex-start;flex-direction:column}
+ .section-head h2{font-size:13px}
+}
+</style>
+</head>
+
+<body>
+<div class="app">
+
+<aside class="sidebar">
+ <div class="logo">
+  <div class="logo-icon">⚙</div>
+  <div class="logo-text">
+   <div class="logo-name">SmartFactory AI</div>
+   <div class="logo-sub">INDUSTRIAL INTELLIGENCE</div>
+  </div>
+ </div>
+
+ <div class="menu-title">WORKSPACE</div>
+ <nav class="nav">
+  <a href="#dashboard" class="active"><span class="nav-icon">▦</span><span class="nav-text">Dashboard</span></a>
+  <a href="#machines"><span class="nav-icon">⚙</span><span class="nav-text">Machines</span></a>
+  <a href="#analytics"><span class="nav-icon">▥</span><span class="nav-text">Analyses</span></a>
+  <a href="#predictions"><span class="nav-icon">✧</span><span class="nav-text">Prédictions IA</span></a>
+  <a href="#alerts"><span class="nav-icon">♧</span><span class="nav-text">Alertes</span></a>
+ </nav>
+
+ <div class="menu-title">ADMINISTRATION</div>
+ <nav class="nav">
+  <a href="#history"><span class="nav-icon">◷</span><span class="nav-text">Historique</span></a>
+  <a href="#settings"><span class="nav-icon">⚙</span><span class="nav-text">Paramètres</span></a>
+ </nav>
+
+ <div class="sidebar-status">
+  <small>Statut de la plateforme</small>
+  <strong>● Tous les systèmes actifs</strong>
+ </div>
+</aside>
+
+<main class="main" id="dashboard">
+
+<header class="topbar">
+ <div class="breadcrumb">SmartFactory AI / <strong>Tableau de bord</strong></div>
+ <div class="top-right">
+  <div class="live"><span class="live-dot"></span> SYSTÈME ACTIF</div>
+  <div class="profile">
+   <div class="avatar">A</div>
+   <div><strong>Administrateur</strong><small>Gestion industrielle</small></div>
+  </div>
+ </div>
+</header>
+
+<!-- HERO VIDEO -->
+<section class="hero">
+ <video autoplay muted loop playsinline poster="factory-poster.jpg">
+  <source src="factory-background.mp4" type="video/mp4">
+ </video>
+ <div class="hero-overlay"></div>
+
+ <div class="hero-content">
+  <div class="eyebrow">✦ INTELLIGENCE ARTIFICIELLE INDUSTRIELLE</div>
+  <h1>La performance industrielle,<br><span>anticipée par l'IA.</span></h1>
+  <p>
+   Surveillez vos équipements, détectez les anomalies et anticipez
+   les pannes grâce à une plateforme intelligente de maintenance prédictive.
+  </p>
+  <div class="hero-buttons">
+   <button class="btn-primary" onclick="document.getElementById('machines').scrollIntoView({behavior:'smooth'})">Explorer les machines →</button>
+   <button class="btn-outline" onclick="document.getElementById('predictions').scrollIntoView({behavior:'smooth'})">Voir les prédictions IA</button>
+  </div>
+ </div>
+
+ <div class="hero-orbit">
+  <div class="orbit-inner">⚙</div>
+ </div>
+</section>
+
+<div class="content">
+
+<div class="section-head">
+ <div><h2>Vue générale</h2><p>Indicateurs clés de votre environnement industriel</p></div>
+ <button class="refresh" onclick="refreshData()">↻ Actualiser les données</button>
+</div>
+
+<!-- KPI -->
+<section class="kpis reveal">
+ <div class="card kpi">
+  <div class="kpi-top"><span class="kpi-label">Total des machines</span><span class="kpi-icon blue">⚙</span></div>
+  <div class="kpi-value counter" data-target="24">0</div>
+  <div class="kpi-note">Équipements enregistrés</div>
+  <div class="progress"><span style="width:100%;background:#2563eb"></span></div>
+ </div>
+
+ <div class="card kpi">
+  <div class="kpi-top"><span class="kpi-label">Opérationnelles</span><span class="kpi-icon green">✓</span></div>
+  <div class="kpi-value counter" data-target="19">0</div>
+  <div class="kpi-note"><b>79,2 %</b> du parc industriel</div>
+  <div class="progress"><span style="width:79%;background:#13b981"></span></div>
+ </div>
+
+ <div class="card kpi">
+  <div class="kpi-top"><span class="kpi-label">Anomalies détectées</span><span class="kpi-icon orange">!</span></div>
+  <div class="kpi-value counter" data-target="4">0</div>
+  <div class="kpi-note">Surveillance nécessaire</div>
+  <div class="progress"><span style="width:45%;background:#f59e0b"></span></div>
+ </div>
+
+ <div class="card kpi">
+  <div class="kpi-top"><span class="kpi-label">Machines critiques</span><span class="kpi-icon red">⚠</span></div>
+  <div class="kpi-value counter" data-target="1">0</div>
+  <div class="kpi-note">Intervention recommandée</div>
+  <div class="progress"><span style="width:20%;background:#ef4444"></span></div>
+ </div>
+</section>
+
+<!-- MACHINE TABLE -->
+<div class="section-head" id="machines">
+ <div><h2>Surveillance des équipements</h2><p>État et mesures des machines industrielles</p></div>
+</div>
+
+<section class="card table-card reveal">
+ <div class="table-top">
+  <div><h3>Liste des équipements</h3><p>Dernières mesures collectées</p></div>
+  <input class="search" id="search" placeholder="⌕ Rechercher..." oninput="filterTable()">
+ </div>
+ <div style="overflow-x:auto">
+ <table>
+  <thead><tr>
+   <th>MACHINE</th><th>TEMPÉRATURE</th><th>VIBRATION</th>
+   <th>UTILISATION</th><th>ÉTAT</th><th>RISQUE IA</th>
+  </tr></thead>
+  <tbody id="machineRows">
+   <tr>
+    <td><div class="machine"><div class="machine-symbol">⚙</div><div><strong>CNC Machine 01</strong><small>CNC-001</small></div></div></td>
+    <td>65 °C</td><td>2.1 mm/s</td><td>72 %</td>
+    <td><span class="pill normal">● Normal</span></td>
+    <td style="color:#13a879;font-weight:700">12 %</td>
+   </tr>
+   <tr>
+    <td><div class="machine"><div class="machine-symbol">⚙</div><div><strong>Machine industrielle 02</strong><small>IND-002</small></div></div></td>
+    <td>82 °C</td><td>5.8 mm/s</td><td>88 %</td>
+    <td><span class="pill warning">● Attention</span></td>
+    <td style="color:#d58b1b;font-weight:700">68 %</td>
+   </tr>
+   <tr>
+    <td><div class="machine"><div class="machine-symbol">⚙</div><div><strong>Compresseur 03</strong><small>CMP-003</small></div></div></td>
+    <td>96 °C</td><td>9.2 mm/s</td><td>96 %</td>
+    <td><span class="pill critical">● Critique</span></td>
+    <td style="color:#e34c4c;font-weight:700">94 %</td>
+   </tr>
+   <tr>
+    <td><div class="machine"><div class="machine-symbol">⚙</div><div><strong>Pompe hydraulique 04</strong><small>PMP-004</small></div></div></td>
+    <td>58 °C</td><td>1.8 mm/s</td><td>55 %</td>
+    <td><span class="pill normal">● Normal</span></td>
+    <td style="color:#13a879;font-weight:700">8 %</td>
+   </tr>
+  </tbody>
+ </table>
+ </div>
+</section>
+
+<!-- CHARTS -->
+<div class="section-head" id="analytics">
+ <div><h2>Analyses et performances</h2><p>Suivi des paramètres et répartition des équipements</p></div>
+</div>
+
+<section class="charts reveal">
+ <div class="card chart-card">
+  <div class="chart-title"><div><h3>Évolution de la température</h3><p>Comparaison des trois équipements</p></div></div>
+  <div class="chart-area"><canvas id="tempChart"></canvas></div>
+ </div>
+ <div class="card chart-card">
+  <div class="chart-title"><div><h3>État du parc industriel</h3><p>Répartition des équipements</p></div></div>
+  <div class="chart-area"><canvas id="stateChart"></canvas></div>
+ </div>
+</section>
+
+<!-- AI -->
+<div class="section-head" id="predictions">
+ <div><h2>Intelligence artificielle</h2><p>Prédiction des risques et maintenance préventive</p></div>
+</div>
+
+<section class="ai-panel reveal">
+ <div class="ai-text">
+  <div class="ai-label">✦ SMARTFACTORY AI ENGINE</div>
+  <h3>Anticipez les défaillances avant qu'elles surviennent.</h3>
+  <p>
+   Le système analyse les données des équipements pour identifier
+   les comportements inhabituels et estimer les risques de panne.
+   Les résultats permettent de planifier les interventions de maintenance.
+  </p>
+ </div>
+ <div class="ai-score"><strong>94%</strong><small>Risque détecté</small></div>
+</section>
+
+<!-- ALERTS -->
+<div class="section-head">
+ <div><h2>Alertes et recommandations</h2><p>Événements récents et actions conseillées</p></div>
+</div>
+
+<section class="bottom reveal">
+ <div class="card panel" id="alerts">
+  <h3>Alertes récentes</h3><p class="panel-sub">Surveillance des événements industriels</p>
+
+  <div class="alert-row">
+   <div class="alert-icon" style="background:#fff0f0;color:#e34c4c">⚠</div>
+   <div class="alert-info"><strong>Risque élevé de panne</strong><p>Compresseur 03 : température et vibrations anormales.</p></div>
+   <span class="alert-time">2 min</span>
+  </div>
+
+  <div class="alert-row">
+   <div class="alert-icon" style="background:#fff7e9;color:#e99a24">!</div>
+   <div class="alert-info"><strong>Température élevée</strong><p>Machine industrielle 02 : contrôle recommandé.</p></div>
+   <span class="alert-time">15 min</span>
+  </div>
+
+  <div class="alert-row">
+   <div class="alert-icon" style="background:#eafaf2;color:#13a879">✓</div>
+   <div class="alert-info"><strong>Équipement opérationnel</strong><p>Machine CNC 01 : fonctionnement normal.</p></div>
+   <span class="alert-time">30 min</span>
+  </div>
+ </div>
+
+ <div class="card panel">
+  <h3>Recommandations de maintenance</h3>
+  <p class="panel-sub">Actions suggérées selon les anomalies détectées</p>
+
+  <div class="recommendation">
+   <strong>🔴 Compresseur 03 — Priorité élevée</strong>
+   <p>Vérifier le refroidissement, les roulements et le système de vibration. Prévoir une inspection technique.</p>
+   <button onclick="showAdvice('Compresseur 03')">Consulter les détails →</button>
+  </div>
+
+  <div class="recommendation">
+   <strong>🟠 Machine industrielle 02 — Surveillance</strong>
+   <p>Contrôler les vibrations et suivre l'évolution de la température.</p>
+   <button onclick="showAdvice('Machine industrielle 02')">Consulter les détails →</button>
+  </div>
+ </div>
+</section>
+
+<footer class="footer" id="history">
+ SmartFactory AI © 2026 · Intelligent Industrial Monitoring Platform
+ <br><br>Démo académique — Données simulées
+</footer>
+
+</div>
+</main>
+</div>
+
+<script>
+// Animation des compteurs
+document.querySelectorAll(".counter").forEach(el=>{
+ const target=Number(el.dataset.target);
+ let current=0;
+ const step=Math.max(1,Math.ceil(target/35));
+ const timer=setInterval(()=>{
+  current=Math.min(current+step,target);
+  el.textContent=current;
+  if(current>=target)clearInterval(timer);
+ },35);
+});
+
+// Graphique température
+Chart.defaults.font.family="Inter";
+Chart.defaults.color="#8290a5";
+
+const tempChart=new Chart(document.getElementById("tempChart"),{
+ type:"line",
+ data:{
+  labels:["08:00","09:00","10:00","11:00","12:00","13:00","14:00"],
+  datasets:[
+   {label:"CNC 01",data:[57,59,61,60,62,63,65],borderColor:"#2563eb",backgroundColor:"#2563eb12",fill:true,tension:.4,borderWidth:2,pointRadius:3},
+   {label:"Machine 02",data:[65,67,69,72,76,79,82],borderColor:"#f59e0b",tension:.4,borderWidth:2,pointRadius:3},
+   {label:"Compresseur 03",data:[70,74,78,82,87,91,96],borderColor:"#ef4444",tension:.4,borderWidth:2,pointRadius:3}
+  ]
+ },
+ options:{
+  responsive:true,maintainAspectRatio:false,
+  interaction:{mode:"index",intersect:false},
+  plugins:{legend:{position:"bottom",labels:{usePointStyle:true,boxWidth:7,padding:17,font:{size:10}}}},
+  scales:{
+   x:{grid:{display:false},ticks:{font:{size:9}}},
+   y:{grid:{color:"#edf1f6"},ticks:{font:{size:9}}}
+  }
+ }
+});
+
+// Graphique état
+new Chart(document.getElementById("stateChart"),{
+ type:"doughnut",
+ data:{
+  labels:["Opérationnelles","En alerte","Critiques"],
+  datasets:[{
+   data:[19,4,1],
+   backgroundColor:["#13b981","#f59e0b","#ef4444"],
+   borderColor:"#fff",borderWidth:4,hoverOffset:8
+  }]
+ },
+ options:{
+  responsive:true,maintainAspectRatio:false,cutout:"72%",
+  plugins:{legend:{position:"bottom",labels:{usePointStyle:true,boxWidth:8,padding:17,font:{size:10}}}}
+ }
+});
+
+// Recherche des machines
+function filterTable(){
+ const q=document.getElementById("search").value.toLowerCase();
+ document.querySelectorAll("#machineRows tr").forEach(row=>{
+  row.style.display=row.textContent.toLowerCase().includes(q)?"":"none";
+ });
+}
+
+// Actualisation de démonstration
+function refreshData(){
+ const btn=document.querySelector(".refresh");
+ btn.textContent="Actualisation...";
+ btn.disabled=true;
+ setTimeout(()=>{
+  const rows=document.querySelectorAll("#machineRows tr");
+  rows.forEach((row,i)=>{
+   if(i<3){
+    const cells=row.querySelectorAll("td");
+    const base=[65,82,96][i];
+    cells[1].textContent=(base+Math.floor(Math.random()*5))+" °C";
+   }
+  });
+  btn.textContent="✓ Données actualisées";
+  btn.disabled=false;
+  setTimeout(()=>btn.textContent="↻ Actualiser les données",1400);
+ },800);
+}
+
+function showAdvice(machine){
+ const advice={
+  "Compresseur 03":"Inspection du refroidissement, contrôle des roulements et vérification des vibrations. Intervention technique recommandée.",
+  "Machine industrielle 02":"Contrôle des fixations, inspection des pièces mécaniques et surveillance régulière de la température."
+ };
+ alert("Recommandation : "+machine+"\n\n"+advice[machine]);
+}
+
+// Navigation active
+document.querySelectorAll(".nav a").forEach(link=>{
+ link.addEventListener("click",()=>{
+  document.querySelectorAll(".nav a").forEach(a=>a.classList.remove("active"));
+  link.classList.add("active");
+ });
+});
+</script>
+</body>
+</html>
+
